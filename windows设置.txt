@@ -1,0 +1,7 @@
+windows设置
+
+设置虚拟机的创建允许  启动时enter---security---visualization
+设置Fn和Ctrl互换      启动时enter---config---keyboard
+
+
+nodepad++安装plugin manager

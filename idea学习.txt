@@ -1,0 +1,55 @@
+idea的使用
+
+project structure---library---+---Java---加入jar包
+modules---dependencies---添加jar包
+
+servlet新加会报错
+project structure---modules---dependencies---library
+
+file settings对本工程生效
+other settings对其他工程生效
+
+配置idea的jvm参数
+
+
+File-->Settings-->Appearance&Behavior-->System Setting
+此时在右边区域有一个”Reopen last project on startup“，如果勾选，则表示启动后自动进入上次最后打开的项目，否则，进入选择界面
+
+新建Maven project项目时，需要选择archetype。
+建立Maven项目时，网上建议的分别是 
+1、cocoon-22-archetype-webapp
+2、maven-archetype-quickstart
+3、maven-archetype-webapp一个简单的Java Web应用程序
+4、maven-archetype-site 聚合子工程
+
+
+idea配置git
+
+vcs---git关联版本控制
+settings---version control---ignore file
+
+
+
+idea配置jmx端口
+edit configurations---jetty server settings
+
+
+war模式：将WEB工程以包的形式上传到服务器 ；
+war exploded模式：将WEB工程以当前文件夹的位置关系上传到服务器；
+
+（1）war模式这种可以称之为是发布模式，看名字也知道，这是先打成war包，再发布；
+
+（2）war exploded模式是直接把文件夹、jsp页面 、classes等等移到Tomcat 部署文件夹里面，进行加载部署。因此这种方式支持热部署，一般在开发的时候也是用这种方式。
+
+（3）在平时开发的时候，使用热部署的话，应该对Tomcat进行相应的设置，这样的话修改的jsp界面什么的东西才可以及时的显示出来
+============================================================================================
+用一个jetty跑两个module，用一个idea的页面
+
+alt+enter   可以实现抽象类的抽象方法
+
+idea展示多行
+Editor->General->Editor tabs->show tabs in single row
+
+No executable code found at line
+没有重新编译
+

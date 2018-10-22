@@ -1,0 +1,26 @@
+【mysql】Date和String的互相转换（DATE_FORMAT & STR_TO_DATE）
+1.Date  ——>  String
+    使用的函数：DATE_FORMAT(date,format)     date:需要转换的日期       format:格式化的样式
+   format样式整理：
+        年：  %Y  显示四位 ： 2015            %y    只显示后两位  ：15
+        月：  %M 月份的英文显示：October %m  月份的阿拉伯显示：01-12  %b 月份的英文缩略显示：Oct  %c  月份的阿拉伯显示：1-12
+        日：  %d 阿拉伯显示：00-31        %D 带有英文后缀：1st-31th     %e 阿拉伯显示：1-31          %j   年的天：001-366   
+        时：  %H ：00-23           %h:01-12        %I:01-12      %k:0-23      %l:1-12
+        分：   %i：00-59
+        秒：   %S：00-59        %s:00-59
+        微妙： %f
+        AM/PM:%p
+        12小时制时间：%r:   02:02:44 PM
+        24小时制时间： %T：  14:02:44
+         周： %W：周的英文显示      %w 周的阿拉伯显示 ：0（星期日）-6（星期六）  %a   周的英文缩略显示：Mon-
+    eg:DATE_FORMAT(now(),"%Y-%m-%d %T")   2015-09-01 17:10:52
+    DATE_FORMAT(now(),"%Y-%m-%d %H:%i:%s %p")     2015-09-01 17:10:52 PM
+2.String ——>Date
+     使用的函数：STR_TO_DATE(str,format)       str:字符形式的日期       format:格式化样式
+  eg:   STR_TO_DATE('1992-04-12',"%Y-%m-%d")   输出：1992-04-12（日期形式）
+  
+  
+  
+  
+  查看表的信息
+  show create table 表名

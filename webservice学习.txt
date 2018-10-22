@@ -1,0 +1,105 @@
+webservice学习
+
+http://172.16.46.79/helloWorld
+192.168.1.102
+
+String address="http://172.16.46.79/helloWorld";
+Endpoint.publish(address, implementor);      jdk实现暴露服务
+
+
+访问地址http://172.16.46.79/helloWorld?wsdl   ip是本地ip。cmd---ipconfig
+
+要导入的包有javax.jws(@Service),jaxws-api(Endpoint)。
+
+
+JaxWsServerFactoryBean类---cxf实现
+JaxWsServerFactoryBean factoryBean=new JaxWsServerFactoryBean();
+factoryBean.setAddress(address); 
+factoryBean.setServiceClass(HelloWorld.class); 
+factoryBean.setServiceBean(implementor); 
+factoryBean.create();
+
+=========================================================
+
+wsdl2java http://172.16.46.79/helloWorld?wsdl 
+
+Exception in thread "main" java.lang.UnsupportedClassVersionError: org/apache/cx
+f/tools/wsdlto/WSDLToJava : Unsupported major.minor version 51.0
+
+将jdk环境变量改为jdk1.7，wadl2java命令成功生效
+
+要设置Path，添加apache-cxf的bin目录
+
+客户端
+		HelloWorldService service=new HelloWorldService();
+		HelloWorld helloWorld=service.getHelloWorldPort();
+		System.out.println(helloWorld.say("java1234"));
+效果：在客户端能够直接去访问服务端的接口
+===========================================================
+
+cxf支持java bean，对map不支持
+@XmlJavaTypeAdapter(MapAdapter.class)
+MapAdapter extends XmlAdapter<MyRole[], Map<String,List<Role>>>
+public class MyRole {
+	private String key;
+	private List<Role> value;}
+在MapAdapter中实现适配转换
+==========================================================
+cxf拦截器
+server端添加内置拦截器
+factoryBean.getInInterceptors().add(new LoggingInInterceptor()); 
+factoryBean.getOutInterceptors().add(new LoggingOutInterceptor())
+client端添加
+Client client=ClientProxy.getClient(helloWorld);
+client.getInInterceptors().add(new LoggingInInterceptor()); 
+client.getOutInterceptors().add(new LoggingOutInterceptor());
+
+
+===============================================================
+
+自定义拦截器
+
+MyInterceptor extends AbstractPhaseInterceptor<SoapMessage>
+super(Phase.PRE_INVOKE);  前置拦截器         ---服务端
+super(Phase.PREPARE_SEND);准备发送拦截器     ---客户端
+List<Header> headers=message.getHeaders();通过headers传递消息
+
+
+客户端先发送消息out，服务端先接收消息in
+============================================================
+
+
+spring整合cxf
+spring配置文件配置
+自动扫描包component-scan 扫描所有service和component
+<import resource="classpath:META-INF/cxf/cxf.xml"/>
+<import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+
+web.xml配置
+spring配置文件所在
+contextLoadConfiguration
+监听器
+listener ContextLoadListener
+servlet
+CXFServlet  /webservice/*
+<jaxws:endpoint implementor="#helloWorld" address="/HelloWorld" ></jaxws:endpoint>
+
+=============================================================
+schema规范
+1.所有的标签和属性由schema定义
+2.所有的schema文件有一个id，为namespce
+3.namespace的值由targetNamespace属性来指定，是一个url，很可能不存在
+4.引入一个schema约束 属性xmnls  属性值为对应的schema的id(namespace)或w3的值
+5.如果引入的schema不是w3c,必须指定schema文件的位置
+xsi schemaLocation="namespace book.xsd"
+需要添加声明
+
+xmlns：dd(别名)=“”；
+===================================================================
+wsdl   web service definition language
+soap   simple object access protocal    基于http和xml的协议
+
+
+
+
+
