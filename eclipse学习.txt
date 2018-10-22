@@ -1,0 +1,5 @@
+eclipse配置
+定制new File页面
+window---customize perspective
+
+window---preference---server---tomcat

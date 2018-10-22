@@ -1,0 +1,96 @@
+自学日记
+git init 初始化
+git status 查看状态
+git add   添加文件
+git config 
+git rm --cached 删除文件
+git commit
+git checkout 取消修改
+git commit -a 提交新文件=git add
+git reset HEAD  内存取消
+git commit -m “注释” good.txt
+设置签名
+git config user.name tom_pro  项目签名
+git config user.email ... 
+
+配置文件 
+cat .git/config
+
+
+git config --global user.name tom_pro  系统用户签名
+git config --global user.email ... 
+
+配置文件  cat ~/.gitconfig
+
+:set nu 显示行号
+ls -a
+
+工作区---暂存区---本地库
+
+git log查看日志
+git log --pretty=oneline
+git log --oneline
+git reflog
+
+git reset --hard hash值
+git reset --hard HEAD^  回退版本
+git reset --hard HEAD~3  回退版本
+
+soft 仅在本地库中移动HEAD指针
+mixed 移动指针  重置缓存区
+
+git diff HEAD^ apple.txt
+git diff apple.txt
+git diff
+
+========================================================
+git branch -v
+git branch [分支名]
+git checkout [分支名]
+git merge [分支名]   合并[分支名]到当前分支
+
+当出现冲突时，在merging分支中
+git commit 不加文件名
+
+git运用hash算法，验证文件的完整性，在网络传输过程中不丢失
+git版本切换时通过HEAD指针的切换
+
+git remote -v
+git remote add origin [url]
+git push origin master   推送文件到远程
+
+git clone [url] 相当于代码copy，初始化本地库，创建orgin的别名
+git pull=git fetch +git merge
+git fetch 之后可以git checkout origin/master
+
+git pull [url] master
+
+
+
+pull request
+fork
+========================================================
+eclipse
+工程---Team---shareproject---git---
+
+window---preferenence---git---configuration---repository settings
+用户签名---add entry
+
+修改全局配置
+git config --global core.excludesfile ~/.gitignore
+
+
+========================================================
+Team---git---add to index
+Team---git---commit
+
+Team---remote---push---连接不上
+windows-->Preferences-->Team-->Git-->Configuration-->User Settings
+http.sslVerify=false
+===============git推送，clone失败==================
+sourcetree跳过注册的方法
+https://www.cnblogs.com/lucio110/p/8192792.html
+
+
+
+
