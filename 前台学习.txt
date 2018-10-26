@@ -13,6 +13,18 @@ Objectj Query.extend( target, object1, [objectN])
 jQuery.fn.extend(object);
 对jQuery.prototype进得扩展，就是为jQuery类添加“成员函数”。jQuery类的实例可以使用这个“成员函数”。
 
-
 jQuery.fn.extend = jQuery.prototype.extend
 你可以拓展一个对象到jQuery的 prototype里去，这样的话就是插件机制了。
+
+
+
+===================================================================
+jquery的选择器
+$(this)	当前 HTML 元素
+$("p")	所有 <p> 元素
+$("p.intro")	所有 class="intro" 的 <p> 元素
+$(".intro")	所有 class="intro" 的元素
+$("#intro")	id="intro" 的元素
+$("ul li:first")	每个 <ul> 的第一个 <li> 元素
+$("[href$='.jpg']")	所有带有以 ".jpg" 结尾的属性值的 href 属性
+$("div#intro .head")	id="intro" 的 <div> 元素中的所有 class="head" 的元素
