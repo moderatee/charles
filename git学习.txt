@@ -92,5 +92,15 @@ sourcetree跳过注册的方法
 https://www.cnblogs.com/lucio110/p/8192792.html
 
 
+=================================================
+source tree登录失败
+在sourcetree--设置---
+http://account:password@git.jeiker.com/xiao/boss.git
+
+
+====================================================
+标签 ---迭代开发时需要加个标记，可能类似于v1.0.0版本上线
+
+
 
 

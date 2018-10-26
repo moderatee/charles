@@ -53,3 +53,15 @@ Editor->General->Editor tabs->show tabs in single row
 No executable code found at line
 没有重新编译
 
+==============================================================================================
+idea添加类的模板
+打开Preferences
+Editor -> File and Code Templates -> Files -> Class 
+
+
+idea添加插件
+idea---settings---plugins---Brows reporsitories
+
+idea添加get，set方法
+alt+insert
+
