@@ -1,0 +1,17 @@
+软件安装的bug
+
+sourceTree免安装
+
+进入%LocalAppData%\Atlassian\SourceTree\
+创建accounts.json
+
+
+===================================================
+sublime软件安装插件管理
+
+
+首选项---Package Settings---Package Control---settings - user
+
+ "channels":     
+ [ "E:\\sublime_channel_v3.json"],
+channel_v3.json
