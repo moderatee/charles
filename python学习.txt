@@ -101,3 +101,239 @@ isinstance(“hello”,(str,int，float))
 
 
 对象的三个特征 id value type
+
+条件控制
+mood = False
+if mood:
+	print("hello")
+	#print("hi")
+else:
+	print(12)
+
+python  input()等待输入  sublime不支持
+
+python  的pass语句
+pass：占位
+elif：简化代码
+while(True):
+else:当while结束，else执行
+
+for in ：
+    pass
+else
+
+break,continue跳出。break会跳出一层循环
+
+for x in range(0,10):
+	print(x)
+
+for x in range(0,10,2):步长
+	print(x)
+
+for x in range(0,10,2):
+	print(x,end=",")
+同行打印 0,2,4,6,8,
+
+a=[1,2,3,4,5]
+b=a[0:len(a):2]
+print(b)
+
+包，模块，类
+
+__init__.py包含此文件才是一个包
+__init__.py的命名就是该文件所在的包名
+
+同一文件下导入
+import demo
+print(demo.question)
+
+import t.demo as m as可以把包名简化
+
+from t.demo import question导入具体的变量
+from t import demo  导入模块
+from t.demo import * 导入所有的
+
+
+__all__=['a,'c']    只被导出a,c变量
+__all__内置属性，变量
+
+from t.demo import question\
+answer
+from t.demo import(question,
+answer)换行
+
+
+__init__.py其他文件导入此文件所在目录，会执行此文件
+__init__.py也能定义__all__
+利用init文件进行批量导入
+
+包和模块不能重复导入
+避免循环导入：a导入b，b导入a
+
+result=round(a,3) 保留3位小数
+
+import this 查看python之禅
+help(print) 查看print函数定义
+
+定义函数
+def add(x,y)
+    return x+y
+
+没有return，返回none
+
+def add(x,y):
+    return x+y,x*y
+
+s = add(2,8)
+print(s)
+返回多个值，返回一个元组
+a,b=add(3, 5)   序列解包
+
+a,b,c=1,2,3
+d=1,2,3  元组
+
+关键字参数
+print_hello(1, name='tanggu')
+
+# 正确的默认参数定义方式--> 位置参数在前，默认参数在后
+def print_hello(name, sex=1):
+    ....
+
+类的定义
+class Student():
+	name=""
+	age=""
+	def print_s(self):
+		print('name:'+self.name)
+		print('age:'+self.age)
+
+stu=Student()
+stu.print_s()
+
+def __init__(self,age):
+    self.age=age
+构造函数
+self代表一个对象实例，而与类无关
+
+
+self.__class__.sum类变量
+Student.sum
+
+------------------------------
+@classmethod
+def plus_sum(cls):
+    print(cls.name)
+    获取类变量
+类和对象都可以调用类方法，对象不推荐
+
+    @staticmethod
+	def add(x,y):
+		print(x,y)
+
+Student可以不包含name，age，仅仅是一个抽象的概念，在init方法可以用self定义
+
+print(std.__dict__)
+print(Student.__dict__)
+打印变量
+
+__marking  方法私有
+student.__score=-1  新添加的变量，要先定义，才能使用
+
+私有变量会改名
+__类名__私有变量名
+
+
+子类调用父类的构造
+def __init__(self,school,name,age):
+    self.school=school
+    Human.__init__(self,name,age)  self 要传进去
+    super.(Student,self).__init__(name,age)
+class Student(People)  继承，可以多继承
+
+
+
+判断字符串包含python
+a.index('Python')>-1
+'Python' in a
+
+import re
+print(re.findall('as', "adfgas"))
+
+\d 匹配一个数字  [0-9]
+\D 匹配一个非数字
+re.findall('\d', "adfg2as1")
+
+re.findall('a[cf]c', "adfgas")
+出现在[]中是或的关系
+
+re.findall('a[c-f]c', "adfgas")
+c-f ：c到f的字符
+
+\w 匹配字母和数字和下划线  [A-Za-z0-9_]
+\s匹配空白字符  ' ','\t','\n','\r'
+
+
+re.findall('[a-z]{3}', "adfgas")  匹配三个字符
+re.findall('[a-z]{3,6}', "adfgas") 匹配三到六个字符
+
+re.findall('[a-z]{3,6}?', "python 1111java678php")
+返回结果：['pyt', 'hon', 'jav', 'php']
+非贪婪 
+贪婪与非贪婪
+
+re.findall('python*', "pytho0python1pythonn2") 
+*对前面一个字符表示0次或多个，+表示至少出现多次，？表示匹配0次或1次
+
+?在{3,6}范围后表示非贪婪
+
+re.findall('^\d{4,8}$', "1000010000")
+^从字符串的开始进行匹配，$从字符串的末尾匹配
+
+re.findall('(Python){3}','10010000")
+匹配一组字符
+
+re.findall('c#','PythonC#\nJavaPhp',re.I)
+匹配忽略大小写
+
+.匹配除换行符\n之外其他所有字符
+
+re.findall('c#.{1}','PythonC#\nJavaPhp',re.I|re.S)
+re.S满足.匹配任意字符
+
+re.sub('c#','GO','PythonC#\nJavaPhp',0)
+替换，0的话无限次替换，1替换一次
+
+def conv(val):
+	print(val)
+	matched=value.group()
+	return "!"+'matched'+'!'
+r=re.sub('C#', conv, 'C#1233C#kkkkC#len')
+print(r)
+
+<_sre.SRE_Match object; span=(0, 2), match='C#'>
+
+re.sub('\d',convert,s)
+
+match  从字符串开始进行匹配，首字母满足匹配，既有值
+search 找到第一个
+
+s='life is short ,I use python'
+r=re.search('life(.*)'python',s)
+print(r.group(1))
+
+group(1)可以匹配()之间的字符
+
+r=re.findall('life(.*)'python',s) 
+print(r)
+
+r=re.search('life(.*)'python(.*)python',s)
+r.group(0)
+r.group(1)
+r.group(2)
+
+r.group(0,1,2)
+r.groups()
+
+
+
+

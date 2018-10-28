@@ -14,4 +14,30 @@ sublime软件安装插件管理
 
  "channels":     
  [ "E:\\sublime_channel_v3.json"],
+ 
 channel_v3.json
+
+常用的插件有
+
+emmet
+SublimeCodeIntel    代码提示
+
+
+很多人在安装完成后输入html:5然后按住Tab键并没有反应，这是什么原因导致的呢？
+原来Emmet默认的快捷键是Ctrl+E，我们需要将其设置成常用的Tab键。
+
+在菜单栏选择Preferences-->PackageSettings-->Emmet-->KeyBindings-->User，将以下信息粘贴进去即可。
+
+[{"keys": ["tab"], "args": {"action": "expand_abbreviation"}, "command": "run_emmet_action", "context": [{"key": "emmet_action_enabled.expand_abbreviation"}]}]
+
+
+SideBarEnhancements
+---打开侧边栏后，右击文件出现更多选择
+打开文件夹可见效果
+
+TrailingSpacer 高亮显示多余的空格和Tab
+设置“删除多余空格”的快捷键，打开 "Preferences / Key Bindings - User" 添加:
+
+
+JsFormat
+右键+jsformat
