@@ -334,6 +334,12 @@ r.group(2)
 r.group(0,1,2)
 r.groups()
 
+-------------------------
+import json
+json_str='{"name":"liming","age":30}'
+stu=json.loads(json_str)
+print(stu)
+
 
 
 
