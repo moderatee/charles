@@ -28,3 +28,8 @@ $("#intro")	id="intro" 的元素
 $("ul li:first")	每个 <ul> 的第一个 <li> 元素
 $("[href$='.jpg']")	所有带有以 ".jpg" 结尾的属性值的 href 属性
 $("div#intro .head")	id="intro" 的 <div> 元素中的所有 class="head" 的元素
+
+
+$('#create_date a')  找到id为create_date下面所有的a标签---链接
+not() 从匹配元素集合中删除元素
+$('#create_date a').not('#figure_time').click

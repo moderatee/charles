@@ -341,5 +341,89 @@ stu=json.loads(json_str)
 print(stu)
 
 
+from enum import Enum
+
+class VIP(Enum):
+	yellow=1
+	green=2
+枚举类型不可更改值，标签不可重复
+
+VIP.yellow.value   值
+VIP.yellow.name    标签
+遍历不会打印重复值
+for v in VIP:
+	print(v)
+
+for v in VIP.__members__.items():
+	print(v)
+
+for v in VIP.__members__:
+	print(v)
+
+数字转化为枚举类型VIP(1)
+
+IntEnum 强制值都是数字
 
 
+from enum import IntEnum,unique
+@unique
+class VIP(IntEnum):
+	test=1
+	yellow=2
+数值不允许重复
+
+把一个函数当做另外一个函数的返回结果
+
+def curve_pre():
+	a=25
+	def curve(x):
+		return a*x*x
+	return curve
+f=curve_pre()
+print(f(2))
+
+
+如果a在函数curve_pre中未定义，在调用之前定义，不会报错;如果同时存在定义，会使用函数里面的变量
+a=3
+def curve_pre():
+	a=5
+	def curve(x):
+		#a=1
+		return a*x*x
+	return curve
+f=curve_pre()
+a=10
+print(f(2))
+
+
+f.__closure__闭包的变量会存在
+f.__closure__[0].cell_contents获取闭包变量的值
+只有a=5，才有闭包的值
+
+orgin=0
+def go(step):
+#	global orgin
+	new_pos=orgin+step
+#	orgin=new_pos
+	return new_pos
+print(go(2))
+print(go(3))
+
+当orgin在函数中没有定义，能获取外部变量;当orgin在函数中定义，被认为是局部变量
+global关键字可以让运行正确，全局变量
+
+
+def factory(pos):
+	def go(step):
+		nonlocal pos
+		new_pos=pos+step
+		pos=new_pos
+		return new_pos
+	return go
+tourist=factory(0)
+
+print(tourist(2))
+print(tourist(3))
+
+闭包=函数+环境变量（函数定义的时候）
+函数式编程避免使用全局变量

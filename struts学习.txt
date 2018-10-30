@@ -279,3 +279,78 @@ context区域 map结构  获取数据加#
 获取valuestack的两种方式
 ValueStack valueStack=ActionContext.getContext().getValueStack();
 ValueStack valueStack2=(ValueStack) ServletActionContext.getRequest().getAttribute("struts.valuestack");
+
+
+==========================================================
+向valuestack存值---向action中存值，设置action的属性
+在action中定义User属性，生成get方法
+execute中User user=new User(...);
+<s:debug></s:debug>  查看valuestack的结构
+在jsp中获取值<s:property value="user.name"/>
+
+--------------------------
+向valuestack存值
+ValueStack valueStack=ActionContext.getContext().getValueStack();
+valueStack.push(user)
+<s:property value="name"/>  默认取栈顶取数据
+
+新建了一个map
+valueStack.set("name1","charles")
+<s:property value="name"/> 
+------------------------------
+获取root数据
+valueStack.set("list",list)
+<s:property value="list[0].name"/> 
+
+获取context数据
+ServletActionContext.getRequest().setAttribute();
+<s:property value="#request.name"/> (application,session)
+<s:property value="#parameters.id"/> 接收参数
+
+el也能访问值栈数据，request数据能获取
+
+<%
+request.setAttribut();
+%>
+<s:property value="#request.name" />
+
+<s:iterator value="list">
+<s:property value="" />
+</s:iterator>
+
+<s:iterator var="i" value="{'aa','bb','cc'}">
+<s:property value="i或者#i" />
+</s:iterator>
+
+
+<s:iterator value="#{'aa':1,'bb':2,'cc':3}">
+<s:property value="key" />
+<s:property value="value" />
+</s:iterator>
+
+<s:iterator var="entry" value="#{'aa':1,'bb':2,'cc':3}">
+<s:property value="#entry.key" />
+<s:property value="#entry.value" />
+</s:iterator>
+
+<s:radio list="{'男'，'女'}" name="sex" label="性别"/>
+<s:radio list="#{'1':'男'，2':'女'}" name="sex" label="性别"/>
+
+强制识别ognl表达式
+<s:textfield name='name' value='%{#request.name}'/>
+
+$在配置文件中使用ognl
+欢迎${#session.user.username}
+
+<action name="download1" class="cn.itcast.struts2.demo2.DownloadAction1">
+    <result name="success" type="stream">
+        <!-- 允许下载的文件的类型：通过ognl表达式获取，Action中提供getContentType方法 --> 
+        <param name="contentType">${contentType}</param>
+        <!-- 下载头，包括：浏览器显示的文件名，通过ognl表达式获取，Action中提供getFileName方法 -->
+        <param name="contentDisposition">attachment;filename=${fileName}</param>
+            <!-- 对应的就是Action种的属性，返回流的属性，需要在Action中提供getInputStream方法，该方法返回值类型为java.io.InputStream类型，这是约定的。 -->
+            <param name="inputName">inputStream</param>
+            <!-- 缓冲区大小设置 -->
+        <param name="bufferSize">1024</param>
+    </result>
+</action>

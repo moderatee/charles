@@ -65,3 +65,10 @@ idea---settings---plugins---Brows reporsitories
 idea添加get，set方法
 alt+insert
 
+
+
+idea默认快捷键
+alt+7  查找该类的方法，属性
+ctrl+shift+n查找文件
+ctrl+shift+H找到方法的调用
+
