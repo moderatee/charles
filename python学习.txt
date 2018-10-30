@@ -427,3 +427,135 @@ print(tourist(3))
 
 闭包=函数+环境变量（函数定义的时候）
 函数式编程避免使用全局变量
+
+ctrl+end ----跳到文件末尾
+f=lambda x,y:x+y
+print(f(1,2))
+
+lambda 参数列表 ：表达式
+
+x>y?x:y
+x if x>y else y
+
+
+list_x=[1,2,3,4,5,6]
+def square(x):
+	return x*x
+
+r=map(square,list_x)    ----映射
+print(type(r))    ----map结构
+print(list(r))    [1, 4, 9, 16, 25, 36]
+
+
+th=map(lambda x:x*x,list_x)
+
+th=map(lambda x,y:x*x+y,list_x,list_y) map可变参数，
+list_x和list_y的元素个数取决于数字较小的
+lambda表达式参数个数和list的个数要一致。
+
+连续计算，连续调用lambda
+from functools import reduce
+kk=reduce(lambda x,y:x+y,list_x)
+print(kk)
+
+kk=reduce(lambda x,y:x+y,list_x,10)
+用10去连续加整个序列
+
+
+filter(lambda x:True if x==1 else False,list_x)
+filter(lambda x:x,list_x)
+lambda的表达式要求为bool值，可以判断真和假
+
+装饰器
+def print_current_time(func):
+	print(time.time())
+	func()
+
+def decorator(func):
+	def wrapper():
+		print(time.time())
+		func()
+	return wrapper
+
+f=decorator(func)
+f()
+---------------------------
+@decorator
+def func():
+	print("===11=====")
+
+func()
+没有改变方法的实现，也没有改变方法的调用，但增加了功能
+
+------------------------------
+def decorator(func):
+	def wrapper(name):
+		print(time.time())
+		func(name)
+	return wrapper
+
+@decorator
+def func(name):
+	print("===11====="+name)
+
+func('hello')
+支持一个参数的装饰器
+--------------------------------
+
+def decorator(func):
+	def wrapper(*args,**kw):
+		print(time.time())
+		func(*args,**kw)
+	return wrapper
+
+当函数的参数不确定时，可以使用*args 和**kwargs，*args 没有key值，**kwargs有key值。
+
+
+sublime安装调试器SublimeRPEL,出现没有对应的功能
+解决方案：github下载pacakage功能恢复
+
+$file_basename does not exist
+"首选项"→"插件设置"→"SublimeREPL"→"Settings - User"，添加以下内容
+    "default_extend_env": {"PATH": "{PATH};C:\\Python27"}
+
+alt+shift+2   显示2个窗口
+
+#day_name=switcher[0]
+day_name=switcher.get(6,"unKnown")
+字典用get方法更加安全，取不到可以获取默认值
+
+
+def get_sunday():
+	return 'sunday'
+def get_monday():
+	return 'monday'
+def get_default():
+	return 'nuknown'
+
+switcher={0:get_sunday,1:get_monday}
+day_name=switcher.get(6,get_default)()
+print(day_name)
+
+列表推导式
+a=[1,2,3,4,5]
+b=[i*i for i in a]
+b=[i**3 for i in a]
+b={i**3 for i in a}
+b=[i**3 for i in a if i>=5]
+b=[key for key,value in students.items()]字典
+print(b)
+
+type(None) ---NoneType
+
+class Test():
+	def __len__(self):
+		return 0#可以返回bool值和整数，小数和字符串不行
+	def __bool__(self):
+		return False
+test=Test()
+if not test:
+	print("11111")
+
+自定义对象__len__和__bool__内置方法决定对象的bool取值bool(test)
+__len__单存在就调用，__bool__也存在就会调用bool，不调用len
+
