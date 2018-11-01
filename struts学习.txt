@@ -354,3 +354,7 @@ $在配置文件中使用ognl
         <param name="bufferSize">1024</param>
     </result>
 </action>
+
+----------------------------------------------
+filter:过滤器，过滤从客户端对服务端的请求（包含jsp，html）
+拦截器：拦截客户端对Action的访问，拦截action的具体的方法

@@ -1,0 +1,47 @@
+快捷键设置：
+vim ~/.bashrc
+==alias pycharm='/home/charles/下载/pycharm-2018.2.4/bin/pycharm.sh'==
+source ~/.bashrc
+
+解压安装包 tar -zxvf *.tar.gz(z是针对gz格式，x是解压)
+
+磁盘空间不够(修改成200G,不能往回缩了)
+1. 虚拟机设置
+sudo fdisk -l
+fdisk /dev/sda  编辑
+n 增加新分区
+p 创建主分区
+[root@localhost ~]# mkfs  /dev/sda3
+mke2fs 1.42.9 (28-Dec-2013)
+无法对 /dev/sda3 进行 stat 调用 --- 没有那个文件或目录
+
+The device apparently does not exist; did you specify it correctly?
+
+解决方法：执行下partprobe 命令
+
+[root@localhost ~]# partprobe
+[root@localhost ~]# mkfs -t ext4 /dev/sda3
+
+mount /dev/sda3 /exapp
+挂载
+vi /etc/fstab
+/dev/sda3           /root/exapp           ext3         defaults         1 2
+
+
+linux装mysql
+Ubuntu用apt-get命令
+centos用yum安装
+
+https://dev.mysql.com/downloads/file/?id=465603   5.7版本的yum
+[root@localhost Software]# yum install -y mysql57-community-release-el7-9.noarch.rpm
+检查安装
+[root@localhost Software]# yum repolist all | grep mysql
+[root@localhost Software]# yum install -y  mysql-community-server
+
+
+
+
+
+
+
+
