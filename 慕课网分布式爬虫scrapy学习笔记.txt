@@ -39,9 +39,190 @@ https://dev.mysql.com/downloads/file/?id=465603   5.7版本的yum
 [root@localhost Software]# yum install -y  mysql-community-server
 
 
+虚拟机安装报错
+空间需求：
+ 570 MB 以上的空间至少需要在文件系统 / 上。   ----未解决
+
+ 修改bind-address
+ 修改root权限
+
+ navicat设置utf8，general_ci
+
+安装virtualenv
+ pip install virtualenv
 
 
+ 豆瓣源
+ https://pypi.douban.com/simple/
+ pip  install  -i  https://pypi.doubanio.com/simple/  --trusted-host pypi.doubanio.com  django
+
+virtualenv scpapytest
+C:\Users\User\scpapytest\Scripts>activate.bat
+
+virtualenv -p "D:\Program Files\Python\Python27\python.exe" scrapy27
+
+pip install virtualenvwrapper
+
+workon
+C:\Users\User\scpapytest\Scripts\scrapy27\Scripts>mkvirtualenv.bat --python="D:\Program Files\Python\Python27\python.exe" py27
+
+修改环境变量需要重启cmd
 
 
+关于Scrapy安装：Microsoft visual c++ 14.0 is required的解决方法总结
+Twisted-18.9.0-cp36-cp36m-win_amd64.whl
+
+mkvirtualenv.bat --python="D:\Program Files\Python\Python36\python.exe" py36
 
 
+对于virtualenv和virtualenvwrapper终于会用了。
+pip 安装的是属于系统环境变量里面python的
+virtualenv和mkvirtualenv的区别
+
+virtualenvwrapper-win安装会让你能够使用workon，在任何路径下
+
+pip list可以查看当前env环境下的python的环境
+
+卸载mysql，这视频默认安装也是够了。。。占用偶的C盘环境
+安装要选择custom，自定义，点击server，会有advanced options选项，选择路径。点击msi后，出现server8.0,原因是我的community没有卸载。
+
+
+virtualenv和mkvirtualenv的区别
+virtualenv是在当前目录下创建虚拟环境（手动删除）
+mkvirtualenv会在WORK_HMOE下创建虚拟环境（可以rmvirtualenv删除）
+
+requests和beautifulsoup都是库，scrapy是库，scrapy基于twisted
+
+
+import re
+
+line = 'booooooooobby123'
+regex_str = ".*(b.*b).*"       #bb
+regex_str1 = ".*?(b.*b).*"		#booooobb
+regex_str2 = ".*?(b.*?b).*"     #booooob
+
+match_obj=re.match(regex_str, line)
+if match_obj:
+    print(match_obj.group(1))
+
+line = 'boobby123'
+regex_str = {(bobby|booby)123}      #bb
+match_obj=re.match(regex_str, line)
+if match_obj:
+    print(match_obj.group(1))
+
+--------------------------------
+import re
+line = 'boobby123'
+regex_str = "((bobby|boobby)123)"      
+match_obj=re.match(regex_str, line)
+if match_obj:
+	print(match_obj.group(2))     #boobby
+	print(match_obj.group(1)) 	#boobby123
+
+出现在[]中不具有特殊含义. *
+
+\s空格  \S非空格 space
+\w英文字母，数字，下划线  word 
+[\u4E00-\u9FA5]  汉字
+
+import re
+#line = 'boobby123'
+line="study in 南京大学"
+#regex_str = ".*([\u4E00-\u9FA5]+大学)"      #京大学
+regex_str = ".*？([\u4E00-\u9FA5]+大学)"	#南京大学
+match_obj=re.match(regex_str, line)
+if match_obj:
+	print(match_obj.group(1))
+
+
+line="xxx出生于2001年"
+regex_str=".*?(\d+)年"   #不加?会出现1，加了？会匹配2001
+
+出生于2001年6月1日
+出生于2001/6/1
+出生于2001-6-1
+出生于2001-06-01
+出生于2001-06
+regex_str=".*出生于(\d{4}[年/-]\d{1,2}([月/-]\d{1,2}|[月/-]$|$))"
+
+unicode解决乱码，但用的字节过多，ASCLL英文，只有65位
+
+用python2.7编码
+>>> s="我用python"
+>>> su=u"我用python"#Unicode编码
+>>> s.encode("utf-8")
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+UnicodeDecodeError: 'ascii' codec can't decode byte 0xce in position 0: ordinal
+not in range(128)
+
+>>> s.decode("gb2312").encode("utf-8")#用gb2312解码成unicode，再显示成utf-8
+'\xe6\x88\x91\xe7\x94\xa8python'
+
+windows系统用gb2312解码，linnux用utf-8解码decode
+
+>>> sys.getdefaultencoding()
+'ascii'
+>>> su.encode('utf-8')
+'\xe6\x88\x91\xe7\x94\xa8python'
+
+python3是用unicode编码
+>>> s="我用python"
+>>> s.encode('utf-8')
+b'\xe6\x88\x91\xe7\x94\xa8python'
+
+
+网址去重
+深度优先（递归实现---父子，参数）
+先爬取一个分支到根节点，爬完返回到分支，再爬另一个分支
+广度优先（宽度优先，队列实现）
+先访问第一层，再访问第二层，再访问第三次
+将a放进去，第一次，a弹出来，将a的子节点b，c放进去，
+第一次，b.c弹出来，将b,c的子节点e,f,g,h放进去。。。
+
+
+爬虫去重策略
+保存到set中
+url经过md5保存到set
+用bitmap，将url通过hash函数映射到某一位
+(解决冲突，冲突的可能性十分大)
+
+bloomfilter改进bitmap，多重hash解决冲突
+1亿/8(8个byte)/1024(KB)/1024=12MB
+
+
+scrapy startproject ArticleSpider
+
+在ArticleSpider的目录下执行
+scrapy genspider jobboie blog.jobboie.com
+
+
+scrapy crawl jobbole
+No module named 'win32api'
+pip  install  -i  https://pypi.doubanio.com/simple/  --trusted-host pypi.doubanio.com  pypiwin32
+
+settings设置
+ROBOTSTXT_OBEY = False
+
+xpath语法
+article：选取article元素所有子节点
+/article:选取根元素article
+article：选取所有属于article的子元素的a元素
+//div   :选取所有的dic子元素
+article//div:选取所有属于article元素的后代的div元素
+//@class  选取所有名为class的属性
+
+/article/div[1]
+/article/div[last()]
+//div[@lang]  选取所有拥有lang属性的div
+//div[@lang='eng']
+
+/div/*
+//div[@*]
+
+scrapy shell url
+title=response.xpath()
+title.extract()[0]
+
+selector=response.xpath('//*[@id="post-114466"]/div[1]/h1/text()')
