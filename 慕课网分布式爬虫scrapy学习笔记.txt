@@ -226,3 +226,169 @@ title=response.xpath()
 title.extract()[0]
 
 selector=response.xpath('//*[@id="post-114466"]/div[1]/h1/text()')
+//*[@id="post-114466"]/div[3]/div[7]/span[1]
+收藏数//span[contains(@class,'bookmark-btn')]/h10/text()
+点赞数response.xpath("//span[contains(@class, 'vote-post-up')]/h10/text()").extract()[0]
+#list过滤
+tag_list = [element for element in tag_list if not element.strip().endswith("评论")] 
+#用，连接
+tags = ",".join(tag_list)
+
+css选择器
+#container id=container
+.class     属性包含class的
+li a    所有li包含的所有a节点
+ul+p    ul后面第一个p元素
+div#container>ul  id为container的div的第一个ul子元素
+ul~p   与ul相邻的p元素
+a[title]  所有有title的a元素
+a[href*='jobble'] 所有href属性包含jobble的a元素
+a[href*='jobble']             以jobble开头
+
+li:nth-child(3)   第三个li元素
+tr:nth-child(2n)  第偶数个tr
+div:not(#container) 所有id非container的div元素
+
+response.css('.entry-header h1::text').extract()
+
+贪婪模式？？？
+
+extract_first()
+
+    def parse(self, response):
+        """
+        1. 获取文章列表页中的文章url并交给scrapy下载后并进行解析
+        2. 获取下一页的url并交给scrapy进行下载， 下载完成后交给parse
+        """
+
+        #解析列表页中的所有文章url并交给scrapy下载后并进行解析
+        post_nodes = response.css("#archive .floated-thumb .post-thumb a")
+        for post_node in post_nodes:
+        #嵌套使用css方法
+            image_url = post_node.css("img::attr(src)").extract_first("")
+            post_url = post_node.css("::attr(href)").extract_first("")
+            #url这是是等于post_url,是为了防止post_url是相对地址，yield是scrapy内置的的方法
+            #callback是回调函数，parse_detail解析主页面里的单个url里面的字段，如文章点赞，标题
+            yield Request(url=parse.urljoin(response.url, post_url), meta={"front_image_url":image_url}, callback=self.parse_detail)
+
+        #提取下一页并交给scrapy进行下载
+        next_url = response.css(".next.page-numbers::attr(href)").extract_first("")
+        if next_url:
+            yield Request(url=parse.urljoin(response.url, next_url), callback=self.parse)
+
+		获取在response.meta里面的属性
+        front_image_url = response.meta.get("front_image_url", "") 
+
+在items定义JobBoleArticleItem类class JobBoleArticleItem(scrapy.Item)，属性为title = scrapy.Field()，初始化article_item["title"] = title，赋值结束后yield article_item
+
+
+修改settings里面的ITEM_PIPELINES，去掉注释
+'scrapy.pipelines.images.ImagesPipeline': 1   路径：优先处理顺序
+IMAGES_URLS_FIELD = "front_image_url"   配置items的字段
+project_dir = os.path.abspath(os.path.dirname(__file__))
+IMAGES_STORE = os.path.join(project_dir, 'images')   配置储存的位置
+
+图片储存
+pip  install  -i  https://pypi.doubanio.com/simple/  --trusted-host pypi.doubanio.com  pillow
+
+
+图片已经能保存了，但是没有把图片和image_url绑定，需要自定义class ArticleImagePipeline(ImagesPipeline)
+
+设置下载的图片的宽度
+# IMAGES_MIN_HEIGHT = 100
+# IMAGES_MIN_WIDTH = 100
+
+
+要删去原来的图片，才能再下载
+'ArticleSpider.pipelines.ArticleImagePipeline': 2
+
+
+import hashlib
+import re
+def get_md5(url):
+    if isinstance(url, str):#str就是一个unicode
+        url = url.encode("utf-8")
+    m = hashlib.md5()
+    m.update(url)
+    return m.hexdigest()
+
+    md5加密url
+
+if __name__="__main__"
+	print(get_md5("..."))
+
+
+class JsonExporterPipleline(object):
+    #调用scrapy提供的json export导出json文件
+    def __init__(self):
+        self.file = open('articleexport.json', 'wb')
+        self.exporter = JsonItemExporter(self.file, encoding="utf-8", ensure_ascii=False)
+        self.exporter.start_exporting()
+
+    def close_spider(self, spider):
+        self.exporter.finish_exporting()
+        self.file.close()
+
+    def process_item(self, item, spider):
+        self.exporter.export_item(item)
+        return item
+
+import codecs
+import json
+self.file=codecs.open('article','w',encoding='utf-8')
+lines=json.dump(dict(item),ensure_ascll=False)+"\n"
+self.file=codecs.open('article','w',encoding='utf-8')
+
+
+from scrapy.exporters import JsonItemExporter
+class JsonExporterPipleline(object):
+    #调用scrapy提供的json export导出json文件
+    def __init__(self):
+        self.file = open('articleexport.json', 'wb')
+        self.exporter = JsonItemExporter(self.file, encoding="utf-8", ensure_ascii=False)
+        self.exporter.start_exporting()
+
+    def close_spider(self, spider):
+        self.exporter.finish_exporting()
+        self.file.close()
+
+    def process_item(self, item, spider):
+        self.exporter.export_item(item)
+        return item
+
+pip  install  -i  https://pypi.doubanio.com/simple/  --trusted-host pypi.doubanio.com  mysqlclient
+
+
+class MysqlPipeline(object):
+    #采用同步的机制写入mysql
+    def __init__(self):
+        self.conn = MySQLdb.connect(' 172.16.46.66', 'root', 'root', 'article_spider', charset="utf8", use_unicode=True)
+        self.cursor = self.conn.cursor()
+
+    def process_item(self, item, spider):
+        insert_sql = """
+            insert into jobbole_article(title, url, create_date, fav_nums)
+            VALUES (%s, %s, %s, %s)
+        """
+        self.cursor.execute(insert_sql, (item["title"], item["url"], item["create_date"], item["fav_nums"]))
+        self.conn.commit()
+
+
+        from twisted.enterprise import adbapi
+        dbpool = adbapi.ConnectionPool("MySQLdb", **dbparms)
+
+        from scrapy.loader import ItemLoader
+
+        item_loader = ArticleItemLoader(item=JobBoleArticleItem(), response=response)
+        item_loader.add_css("title", ".entry-header h1::text")
+        item_loader.add_value("url", response.url)
+        article_item = item_loader.load_item()
+
+		from scrapy.loader.processors import MapCompose, TakeFirst, Join
+         create_date = scrapy.Field(
+        input_processor=MapCompose(date_convert),
+    	)
+    	
+class ArticleItemLoader(ItemLoader):
+    #自定义itemloader
+    default_output_processor = TakeFirst()
