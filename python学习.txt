@@ -340,6 +340,17 @@ json_str='{"name":"liming","age":30}'
 stu=json.loads(json_str)
 print(stu)
 
+格式是字典
+
+json_str='[{"name":"liming","age":30},{"name":"xiaohong"}]'
+stu=json.loads(json_str)
+格式是数组
+
+
+反序列化：json转换
+序列化：转换成json
+
+json.dumps(stu)
 
 from enum import Enum
 
