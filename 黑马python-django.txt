@@ -1,0 +1,168 @@
+django开发中，一个功能木块用一个应用来实现
+创建项目
+django-admin startproject 项目名
+
+__init__.py: 说明test1是一个python包。
+settings.py: 项目的配置文件。
+urls.py: 进行url路由的配置。
+wsgi.py: web服务器和Django交互的入口。
+manage.py:  项目的管理文件。
+
+创建应用
+python manage.py startapp 应用名
+
+__init__.py: 说明目录是一个Python模块。
+models.py: 写和数据库项目的内容, 设计模型类。
+views.py: ，接收请求，进行处理，与M和T进行交互，返回应答。
+定义处理函数，视图函数。
+tests.py: 写测试代码的文件。
+admin.py: 网站后台管理相关的文件。
+5.3 应用注册
+建立应用和项目之间的联系，需要对应用进行注册。
+修改settings.py中的INSTALLED_APPS配置项。
+
+建立应用和项目之间的联系，需要对应用进行注册。
+修改settings.py中的INSTALLED_APPS配置项。
+
+python manage.py runserver
+============================================
+
+在应用models.py中设计模型类。
+必须继承与models.Model类。
+
+1)	生成迁移文件
+命令：python manage.py makemigrations
+2)	执行迁移生成表
+命令：python mange.py migrate
+根据迁移文件生成表。
+生成表名的默认格式：
+应用名_模型类名小写
+
+
+进入项目shell的命令:
+	python manage.py shell
+
+
+首先导入模型类：
+	from booktest.models import BookInfo,HeroInfo
+1)	向booktest_bookinfo表中插入一条数据。
+	b = BookInfo() #定义一个BookInfo类的对象
+	b.btitle ='天龙八部' #定义b对象的属性并赋值
+	b.bpub_date = date(1990,10,11) 
+	b.save() #才会将数据保存进数据库
+2) 查询出booktest_bookinfo表中id为1的数据。
+	b = BookInfo.objects.get(id=1) 
+3) 在上一步的基础上改变b对应图书的出版日期。
+	b.bpub_date = date(1989,10,21)
+	b.save() #才会更新表格中的数据
+4) 紧接上一步，删除b对应的图书的数据。
+	b.delete() #才会删除
+6) 查询图书表里面的所有内容。
+	BookInfo.objects.all()
+	HeroInfo.objects.all()
+
+hbook=models.ForeignKey('BookInfo',on_delete=models.CASCADE)
+
+h.hbook = b2  #给关系属性赋值，英雄对象所属的图书对象
+
+1) 查询出id为2的图书中所有英雄人物的信息。
+	b = BookInfo.objects.get(id=2)
+	b.heroinfo_set.all() #查询出b图书中所有英雄人物的信息
+==================================================
+1)本地化--settings.py
+#LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
+TIME_ZONE = 'Asia/Shanghai'
+#TIME_ZONE = 'UTC'
+2)	创建管理员
+命令：python manage.py createsuperuser
+
+http://127.0.0.1:8000/admin/
+charles
+ruan0719
+
+3）在应用下的admin.py中注册模型类
+from booktest.models import BookInfo
+# Register your models here.
+admin.site.register(BookInfo)
+
+页面显示BookInfo object
+str(b) __str__
+
+4）自定义管理页面显示数据
+class BookInfoAdmin(admin.ModelAdmin):
+    list_display = ["id","btitle","bpub_date"]
+admin.site.register(BookInfo,BookInfoAdmin)
+
+
+
+8.1视图函数的使用
+1) 定义视图函数
+视图函数定义在views.py中。
+例：
+		def index(request):
+			#进行处理。。。
+			return HttpResponse('hello python')
+视图函数必须有一个参数request，进行处理之后，需要返回一个HttpResponse
+
+
+url配置的目的是让建立url和视图函数的对应关系。
+url函数有两个参数，第一个参数是一个正则表达式，第二个是对应的处理动作。
+配置url时，有两种语法格式：
+a) url(正则表达式，视图函数名)
+b) url(正则表达式，include(应用中的urls文件))
+
+
+当用户输入如http://127.0.0.1:8000/aindex时，去除域名和最前面的/，剩下aindex，拿aindex字符串到项目的urls文件中进行匹配，配置成功之后，去除匹配的a字符，那剩下的index字符串继续到应用的urls文件中进行正则匹配，匹配成功之后执行视图函数index，index视图函数返回内容hello python给浏览器来显示。
+
+项目urls.py配置
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('aa/',include('booktest.urls')),
+]
+
+应用urls.py配置
+urlpatterns=[
+    path('index/', views.index),
+]
+
+views.py配置
+def index(request):
+    return HttpResponse('666666，真香')
+
+http://127.0.0.1:8000/aa/index/
+
+
+使用模板文件
+a)	加载模板文件
+去模板目录下面获取html文件的内容，得到一个模板对象。
+b)	定义模板上下文
+向模板文件传递数据。
+c)	模板渲染
+得到一个标准的html内容。
+def index(request):
+    # return HttpResponse('666666，真香')
+    temp=loader.get_template('booktest/index.html')
+    context={"content":"hello","list":list(range(1,10))}
+    res_html=temp.render(context)
+    return HttpResponse(res_html)
+
+settings配置TEMPLATES
+'DIRS': [os.path.join(BASE_DIR),'templates']
+
+{{ content }}
+
+{% for i in list %}
+<li>{{ i }}</li>
+{% endfor %}
+
+
+re_path(r'books/(\d+)',views.book_detail)
+2.0django使用正则，(\d+)表示一组，可以传参到views
+
+
+<li>
+    {{ hero.hname }}  {{ hero.hcomment }}
+{% empty %}
+    没有信息
+{% endfor %}

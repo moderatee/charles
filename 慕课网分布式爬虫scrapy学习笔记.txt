@@ -43,9 +43,10 @@ https://dev.mysql.com/downloads/file/?id=465603   5.7版本的yum
 空间需求：
  570 MB 以上的空间至少需要在文件系统 / 上。   ----未解决
 
- 修改bind-address
- 修改root权限
 
+-------------------------------------------
+ 修改bind-address
+ 修改数据库root权限
  navicat设置utf8，general_ci
 
 安装virtualenv
@@ -392,3 +393,11 @@ class MysqlPipeline(object):
 class ArticleItemLoader(ItemLoader):
     #自定义itemloader
     default_output_processor = TakeFirst()
+
+
+import requests
+try:
+    import cookielib
+except:
+    import http.cookiejar as cookielib
+兼容py2和py3
