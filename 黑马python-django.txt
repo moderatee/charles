@@ -355,3 +355,63 @@ HeroInfo.objects.filter(hbook__btitle='天龙八部')
 
 
 *********************************************************************
+[问题]__init__() missing 1 required positional argument: 'on_delete'
+外键上添加on_delete=models.CASCADE,
+
+自关联
+
+class Areainfo(models.Model):
+    atitle=models.CharField(max_length=20)
+    aParent=models.ForeignKey('self',null=True,blank=True,on_delete=models.CASCADE,)
+
+SELECT * from booktest_areainfo where aParent_id=440000
+
+def areas(request):
+    area=Areainfo.objects.get(atitle='广州市')
+    parent=area.aParent
+    children=area.areainfo_set.all()
+    return render(request, 'booktest/areas.html', {"parent": parent,"children":children,"area":area})
+*********************************************************************
+
+14.	管理器
+BookInfo.objects.all()->objects是一个什么东西呢？
+答：objects是Django帮我自动生成的管理器对象，通过这个管理器可以实现对数据的查询。
+objects是models.Manger类的一个对象。自定义管理器之后Django不再帮我们生成默认的objects管理器。
+book=models.Manager()
+BookInfo.book.all()
+
+
+
+自定义管理器类的应用场景
+1）	改变查询的结果集。
+比如调用BookInfo.books.all()返回的是没有删除的图书的数据。
+objects=BookInfoManager()
+class BookInfoManager(models.Manager):
+    def all(self):
+        books=super().all()
+        books= books.filter(isDelete=False)
+        return books
+2）	添加额外的方法。
+管理器类中定义一个方法帮我们操作模型类对应的数据表。
+使用self.model()就可以创建一个跟自定义管理器对应的模型类对象。
+
+@classmethod
+    def create_book(cls,btitle,bpub_date):
+        obj=cls()
+        obj.btitle=btitle
+        obj.bpub_date=bpub_date
+        obj.save()
+        return obj
+在模型类中增加静态方法，在管理器中定义可以
+BookInfo.objects.craete_book()
+
+
+ BookInfo.objects.create(btitle='tets',bpub_date='1990-1-1')默认封装create方法
+ 在管理器中，model_class=self.model ,book=model_class()
+
+ Django默认生成的表名：
+	应用名小写_模型类名小写。
+元选项：
+需要在**模型类**中定义一个元类Meta,在里面定义一个类属性db_table就可以指定表名。
+class Meta:
+    da_table="bookinfo"
