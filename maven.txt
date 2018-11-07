@@ -1,0 +1,75 @@
+mvn不是内部命令
+将%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem加入Path
+
+%MAVEN_HOME不生效，配置M2_HOME
+
+mvn tomcat:run
+mvn clean
+mvn compile
+mvn test
+mvn package
+mvn install将包放到mvn仓库
+
+
+maven---add plugin---compile---
+<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<encoding>utf-8</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+settings.xml文件中找到有<profile>标签的地方，加上如下配置。配置jdk版本为1.8
+<profile>
+
+<id>jdk-1.8</id>    
+    <activation>  
+        <activeByDefault>true</activeByDefault>    
+        <jdk>1.8</jdk>    
+    </activation>    
+    <properties>    
+        <maven.compiler.source>1.8</maven.compiler.source>    
+        <maven.compiler.target>1.8</maven.compiler.target>    
+        <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>    
+    </properties>    
+</profile>
+
+
+
+pom文件中增加依赖  dependencies---add
+
+设置jsp文件默认utf-8 :windows--preferences--jsp files--encoding
+
+
+用maven启动tomcat问题
+oader constraint violation: loader (instance of org/apache/jasper/servlet/JasperLoader) previously initiated loading for a different type with name "javax/servlet/http/HttpServletRequest"] with root cause
+
+<groupId>javax.servlet</groupId>
+    <artifactId>javax.servlet-api</artifactId>
+    <version>3.0.1</version>
+    <!-- 只在编译和测试中运行 -->
+    <scope>provided</scope>  <!--这一句是不是没写，写了就不会造成冲突-->
+maven的包和tomcat的包冲突
+
+run as--maven build--tomcat:run
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>tomcat-maven-plugin</artifactId>
+				<version>1.1</version>
+				<configuration>
+				<port>8083</port>
+				<path>/helloworld</path>
+				<uriEncoding>utf-8</uriEncoding>
+				</configuration>
+			</plugin>
+
+项目启动路径--http://localhost:8083/helloworld--/HelloServlet
