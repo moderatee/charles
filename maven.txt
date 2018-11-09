@@ -9,6 +9,7 @@ mvn compile
 mvn test
 mvn package
 mvn install将包放到mvn仓库
+mvn deploy 利用mvn deploy命令上传包 到私服
 
 
 maven---add plugin---compile---
@@ -73,3 +74,52 @@ run as--maven build--tomcat:run
 			</plugin>
 
 项目启动路径--http://localhost:8083/helloworld--/HelloServlet
+
+
+servletApi---provided
+jdbc驱动---runtime
+
+
+我们把crm拆分后，有一个父工程，子工程(crm06_dao, crm06_service, crm06_web)要用到的依赖都可以在父工程(crm06)的pom.xml先定义好，将来子工程在开发的时候就不需要再引坐标了。
+
+依赖的传递
+引入struts，会引入其他jar包，是因为struts依赖于一些jar包
+service依赖于dao，引入service，会引入service和dao
+
+去除hibernate和struts重复导入的javaassit的包
+dependency hierarchy---resolved depencies---右键exclueded maven artifacts
+<dependency>
+  		<groupId>org.apache.struts</groupId>
+  		<artifactId>struts2-core</artifactId>
+  		<version>2.3.24</version>
+  		<exclusions>
+  			<exclusion>
+  				<artifactId>javassist</artifactId>
+  				<groupId>javassist</groupId>
+  			</exclusion>
+  		</exclusions>
+  	</dependency>
+
+1．第一声明者优先原则
+谁先申明，就用谁的。跟坐标代码的顺序有关
+由于spring-context在前边以spring-context依赖的spring-beans-4.2.3为准，所以最终spring-beans-4.2.3添加到了工程中。
+
+2．路径近者优先原则
+通过引入struts2-spring-plugin，它会引入spring-beans.3.0.5的版本。需要经过的路径为2个节点
+通过引入srping-beans-4.2.3，它会引入spring-beans.4.2.3的版本，需要经过的路径为2个节点
+如果直接引入spring-beans-4.2.4，只需要经过1个节点
+因此不管spring-beans.4.2.4的位置在哪，系统始终都是引入spring-beans.4.2.4的版本
+
+********************************************************
+版本锁定
+<dependencyManagement>
+  <dependencies>
+  <dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  		<version>4.12</version>
+  	</dependency>
+  </dependencies>
+  </dependencyManagement>
+
+  

@@ -37,3 +37,34 @@ $('#create_date a').not('#figure_time').click
 
 $('#scope .on').attr('value');
 $('#scope .on').val();   内置属性value
+
+
+=================================================
+jquery怎么根据后台传过来的值动态设置下拉框、单选框选中
+$(function(){
+    var sex=$("#sex").val();
+    var marriageStatus=$("#marriageStatus").val();
+    var education=$("#education").val();
+    if(!isnull(sex)){
+        $("input:radio[name='sex'][value="+sex+"]").attr('checked','true');
+    }
+    if(!isnull(marriageStatus)){
+        $("input:radio[name='marriageStatus'][value="+marriageStatus+"]").attr('checked','true');
+    }
+    if(!isnull(education)){
+        $("#education1 option[value='"+education+"']").attr("selected", true);
+    }
+});
+<input type="hidden" id="sex" value="${serviceInfo.sex}"/>
+<input type="radio" name="sex" value="0" checked="checked"/>男
+<input type="radio" name="sex" value="1"/>女
+<input type="hidden" id="marriageStatus" value="${serviceInfo.marriageStatus}"/>
+<input type="radio" name="marriageStatus" value="0" checked="checked"/>是
+<input type="radio" name="marriageStatus" value="1"/>否
+<input type="hidden" id="education" value="${serviceInfo.education}"/>
+<select name="education" id="education1">
+    <option value="硕士">硕士</option>
+    <option value="本科">本科</option>
+    <option value="大专">大专</option>
+    <option value="其它">其它</option>
+</select>
