@@ -1,0 +1,9 @@
+Java - net.sf.json 之 put、accumulate
+
+java实践后，可以把打印结果以注释的形式写在代码后面
+ 		/**
+         * public JSONObject accumulate(String key, Object value)
+         * 累积value到这个key下
+         * 1.如果当前已经存在一个value在这个key下,那么会有一个JSONArray将存储在这个key下来保存所有累积的value
+         * 2.如果已经存在一个JSONArray,那么当前的value就会添加到这个JSONArray中
+         */

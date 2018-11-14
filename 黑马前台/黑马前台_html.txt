@@ -33,3 +33,25 @@ ol--有序列表 定义a,b,c或者1,2,3 type="a" start="4"
 a超链接   target _blank在新建窗口打开 _self在本窗口打开
 
 table>(tr>td{$$$}*5)*4
+
+
+textarea 大的文本框
+表单标签：action提交的地址 method指定get和post
+input type类型有button，reset重置，submit，hidden隐藏域，用来存放页面上id信息
+type有text，password，file，radio，checkbox ，date，tel，number
+name是提交表单时的参数
+value是页面显示的值
+
+
+placeholder提示
+
+
+	<frameset rows="10%,30%,*">
+		<frame src="aaa.html" />
+		<frame src="bbb.html" />
+		<frame src="ccc.html" />
+	</frameset>
+	如果使用frameset 需要将body标签取掉
+			cols : 按列划分页面
+			rows : 按行划分页面
+	给frame去个名称，在链接中指定target，可以实现点击链接，部分页面刷新
