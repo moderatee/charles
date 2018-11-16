@@ -1,0 +1,89 @@
+什么是脚本语言?
+
+​	java源代码 ----> 编译成.class文件 -----> java虚拟机中才能执行
+
+​	脚本语言:   源码  -------- > 解释执行
+
+​	js由我们的浏览器来解释执行
+##### JS的组成:
+ECMAScript : 核心部分 ,定义js的语法规范
+
+DOM: document Object Model 文档对象模型 , 主要是用来管理页面的
+
+BOM : Browser Object Model  浏览器对象模型, 前进,后退,页面刷新, 地址栏, 历史记录, 屏幕宽高
+
+
+##### JS的语法:
+
+变量弱类型: var i = true
+
+区分大小写
+
+语句结束之后的分号 ,可以有,也可以没有
+
+写在script标签
+
+
+##### JS的数据类型:
+
+- 基本类型
+  - string
+  - number
+  - boolean 
+  - undefine
+  - null
+- 引用类型
+  - 对象, 内置对象
+- 类型转换
+  - js内部自动转换 
+
+- 获取页面元素: document.getElementById("id的名称");
+- document.write()  向页面输出
+- console.log() 向控制台输出
+- innerHTML:  向页面输出
+
+JS声明变量:
+
+​	var 变量的名称 = 变量的值
+
+JS声明函数:
+
+​	var 函数的名称 = function(){	
+
+​	}
+
+​	
+
+​	function 函数的名称(){
+
+​	}
+
+
+切换图片
+var img = document.getElementById("img1");
+img.src = "../img/1-161104143944.gif";
+
+			setInterval("test()",2000);
+			setTimeout("test()",2000);
+var timerID;
+			function startDinshiqi(){
+//				timerID = setInterval("test()",2000);
+				timerID = setTimeout("test()",3000);
+			}
+			
+			function stopDingshiqi(){
+//				clearInterval(timerID);
+				clearTimeout(timerID);
+			}
+	onload="init()" 
+
+图片显示和隐藏	
+var img = document.getElementById("img1");
+				img.style.display = "none";
+var img = document.getElementById("img1");
+				img.style.display = "block";
+				
+文档加载顺序
+			var img = document.getElementById("img1");
+			在head的script中定义获取img1对象,是获取不到的.因为下面的div没有被加载.
+			可以放到function中去处理或者把script放到div后面
