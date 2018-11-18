@@ -1,0 +1,103 @@
+
+JQ的入门
+
+```html
+<script>
+			//js文档加载完成的事件
+			window.onload = function(){
+				alert("window.onload   111");
+			}
+			
+			window.onload = function(){
+				alert("window.onload   222");
+			}
+			
+			/*文档加载完成的事件*/
+			jQuery(document).ready(function(){
+			 	alert("jQuery(document).ready(function()");
+			});
+			/*
+			 	jQuery  简写成 $
+			 */
+			$(document).ready(function(){
+			 	alert("$(document).ready(function()");
+			});
+			
+			/*
+				最简单的写法 
+			*/
+			$(function(){
+				alert("$(function(){");
+			});
+			
+		</script>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+jquery和js对象互换
+		function changeJS(){
+				var div = document.getElementById("div1");
+//				div.innerHTML = "JS成功修改了内容"
+				//将JS对象转成JQ对象
+				$(div).html("转成JQ对象来修改内容")
+			}
+			
+			$(function(){
+				//给按钮绑定事件
+				$("#btn2").click(function(){
+					//找到div1
+//					$("#div1").html("JQ方式成功修改了内容");
+					//将JQ对象转成JS对象来调用
+					var $div = $("#div1");
+//					var jsDiv = $div.get(0);
+					var jsDiv = $div[0];
+					jsDiv.innerHTML="jq转成JS对象成功";
+				});
+			});
+
+#################################################################################
+<!--
+			1. 导入JQ相关的文件
+			2.  文档加载完成事件: $(function)  : 页面初始化的操作: 绑定事件, 启动页面定时器
+			3. 确定相关操作的事件
+			4. 事件触发函数
+			5. 函数里面再去操作相关的元素
+		-->
+		<script type="text/javascript" src="../../js/jquery-1.11.0.js" ></script>
+		
+		<script>
+			$(function(){
+				
+				//显示页面图片
+				//给按钮绑定事件
+				$("#btn1").click(function(){
+//					$("#img1").show();
+//					$("#img1").slideDown();
+//					$("#img1").fadeIn(5000);
+
+					$("#img1").animate({ width:"800px",opacity:"1"},5000);
+					
+				});
+				
+				//隐藏页面图片
+				$("#btn2").click(function(){
+					//获得img
+//					$("#img1").hide(10000);
+//					$("#img1").slideUp(500);
+//					$("#img1").fadeOut(5000);
+					$("#img1").animate({ width:"1366px",opacity:"0.2"},5000);
+				});
+			});
+		</script>
+
+显示和隐藏  img.style.display
+
+【JQ中的动画效果】
+
+```javascript
+show()
+hide()
+slideUp
+slideDown
+fadeIn
+fadeOut
+animate : 自定义动画
