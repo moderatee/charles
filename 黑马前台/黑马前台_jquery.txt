@@ -101,3 +101,184 @@ slideDown
 fadeIn
 fadeOut
 animate : 自定义动画
+
+
+//显示广告
+			function showAd(){
+				$("#img1").slideDown(2000);
+				setTimeout("hideAd()",3000);
+			}
+			
+			//隐藏广告
+			function hideAd(){
+				$("#img1").slideUp(2000);
+			}
+			
+			
+			$(function(){
+				setTimeout("showAd()",3000);
+				//setTimeOut里面写的是一个方法加()
+			});
+
+
+设置颜色	---选择器		
+$("#btn1").click(function(){
+					$("#two").css("background-color","palegreen");	
+					$(".mini").css("background-color","palegreen");	
+					$("div").css("background-color","palegreen");
+					$("*").css("background-color","palegreen");
+					$(".mini,span").css("background-color","palegreen");---分组
+});
+
+
+$("#btn3").click(function(){
+					$("#two+div").css("background-color","palegreen");					
+				});
+				$("#btn4").click(function(){
+					$("#two~div").css("background-color","palegreen");					
+				});
+			层级选择器
+			找到one最近的弟选择器#one+div
+			找到two所有的弟选择器#two~div
+			
+			找到第一个元素
+			$("div:first").css("background-color","palegreen");
+			找到偶数位元素---不分层级，第一个为0
+			$("div:even").css("background-color","palegreen");	
+			$("div:odd").css("background-color","palegreen");
+			找到索引大于2的选择器
+			$("div:gt(2)").css("background-color","palegreen");
+			greater than  gt    less than   lt
+			
+			
+			//通过属性选择器去找到 a href
+			//				$("a[href]").css("color","red");   //只有一个属性
+							//找出包含 href ,title
+			//				$("a[href][title]").css("color","red");  // 多个属性
+							//找出包含herf title 并且 title ='testTitle'
+							$("a[href][title='testTitle']").css("color","deeppink");  //多个属性 ,并且指定值
+			
+			表单选择器				
+			$(":text").css("background-color","#FF0000");
+			$(":input").css("background-color","#FF0000"); --包含textarea，select
+			
+			
+			$("ul li:nth-child(2)") 每个ul的第二个li
+			
+			
+			隔行换色
+			$("tbody > tr:even").css("background-color","#CCCCCC");
+			//修改基数行
+			$("tbody > tr:odd").css("background-color","#FFF38F");
+			
+			
+			全选和全不选--属性是prop
+			$(function(){
+							//绑定点击事件
+							//this 代表的是当前函数的所有者
+							$("#checkAll").click(function(){
+								//获取当前选中状态
+			//					alert(this.checked);
+								//获取所有分类项的checkbox
+								// 选择器[属性名称='属性值']
+								$("input[type='checkbox']:gt(0)").prop("checked",this.checked);
+								
+								//使用层级选择器来实现  tbody > tr > td > input
+							//	$("tbody > tr > td > input").prop("checked",this.checked);  //这个可行
+			
+							//	#tab > tbody > tr:nth-child(4) > td:nth-child(1) > input[type="checkbox"]
+					
+								// $("input").prop("checked",this.checked);
+								
+							});
+						});
+						
+						
+						$("#btn1").click(function(){
+		//					$("#div1").append("<font color='red' size='7'>来,互相伤害呀!</font>")
+		//					$("#div1").prepend("<font color='red' size='7'>来,互相伤害呀!</font>");
+							$("#div1").after("<font color='red' size='7'>来,互相伤害呀!</font>");
+		//					$("<font color='red' size='7'>来,互相伤害呀!</font>").appendTo("#div1")
+						});
+						
+						1. append  :  添加子元素到末尾
+						2. appendTo  : 给自己找一个爹,将自己添加到别人家里
+						3. prepend : 在子元素前面添加
+						4. after :   在自己的后面添加一个兄弟
+						
+		jquery的遍历				
+		var cities = ["深圳市","东莞市","惠州市","广州市"];
+		$(function(){
+			$(cities).each(function(i,n){
+			console.log(this)
+		})
+		})
+					
+					//JQ的函数调用
+					$.each(cities,function (i,n){
+						console.log(i+"   "+n);});
+						
+			var provinces = [
+				["深圳市","东莞市","惠州市","广州市"],
+				["长沙市","岳阳市","株洲市","湘潭市"],
+				["厦门市","福州市","漳州市","泉州市"]
+			];
+			
+			$(function(){
+				change方法了解一下
+				$("#province").change(function(){
+					// alert(this.value);
+					//得到城市信息
+					var cities = provinces[this.value];
+					//清空城市select中的option
+					/*var $city = $("#city");
+					//将JQ对象转成JS对象
+					var citySelect = $city.get(0)
+					citySelect.options.length = 0;*/
+					
+					$("#city").empty();  //采用JQ的方式清空
+					//遍历城市数据
+					$(cities).each(function(i,n){
+						$("#city").append("<option>"+n+"</option>");
+					});
+				});
+			});
+
+城市左右联动
+$(function(){
+				$("#a1").click(function(){
+					//找到被选中的那一项
+					//将被选中项添加到右边
+					$("#rightSelect").append($("#leftSelect option:selected"));
+				});
+				
+				//将左边所有商品移动到右边
+				$("#a2").click(function(){
+					$("#rightSelect").append($("#leftSelect option"));
+				});
+			});
+			
+```html
+$(function)  : 文档加载完成的事件
+css()  : 	修改css样式
+prop() :    修改属性/ 获取属性
+html() :    修改innerHTML
+
+append : 	给自己添加子节点
+appendTo :  将自己添加到别人家,给自己找一个爹
+prepend :   在自己最前面添加子节点
+after	:   在自己后面添加一个兄弟
+empty	:   清空所有子节点
+
+$(cities).each(function(i,n){
+  	
+})
+
+$.each(arr,function(i,n){
+  
+});
+
+了解, 熟悉, 熟练, 精通 
+
+经过一个项目,将所有学过串起来
+```

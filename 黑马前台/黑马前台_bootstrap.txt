@@ -1,0 +1,117 @@
+- trigger  :  触发事件,但是会执行类似浏览将光标移到输入框内的这种浏览器默认行为
+- triggerHandler : 仅仅只会触发事件所对应的函数
+- is()
+
+
+​	css() ; 修改css样式
+​	addClass()  : 添加一个class样式
+​	removeClass() : 移除
+
+this表示的是javascript提供的当前对象
+$(this)表示的是用jquery封装候的当前对象
+this对象可以直接用this.style修改样式
+$(this)可以使用jquery提供的方法访问样式
+比如this.style.display="none"在jquery中可以用$(this).css("display","none")实现
+
+
+var value = this.value;
+var value = ($this).val();
+
+is后面接一个选择器
+表单校验
+if($(this).is("#username")){  //判断是否是用户名输入项
+						if(value.length < 6){
+							$(this).parent().append("<span class='formtips onError'>用户名太短了</span>");
+						}else{
+							$(this).parent().append("<span class='formtips onSuccess'>用户名够用</span>");
+						}
+					}
+					
+blur触发时先去找到span元素，而且只找到当前input所在的div中去删除span					
+$(this).parent().find(".formtips").remove();
+
+是的必填类focus时触发blur的操作
+$(".bitian").blur(function(){}).focus(function(){$(this).triggerHandler("blur");
+
+
+$(".bitian").trigger("focus");
+$(".bitian").triggerHandler("focus");---triggerHandler只会触发jquery的第一个元素
+
+
+return的值决定跳转是否成功
+				//给表单提交绑定事件
+				$("form").submit(function(){
+					//触发所有必填项的校验
+					$(".bitian").trigger("focus");
+					//找到错误信息的个数
+					if($(".onError").length > 0){
+						return false;
+					}
+					return true;
+				});
+			});
+
+对请求传回来的数据jsonArr进行操作			
+$.get(url,function(jsonArr){
+	var index = Math.floor(Math.random()*jsonArr.length)
+	var obj = jsonArr[index];
+	//获取单个元素
+})
+
+***********************************************************************
+为了确保适当的绘制和触屏缩放，需要在 <head> 之中添加 viewport 元数据标签。
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+bootstrap 表格加class="table"
+搜狗设置中文状态下英文字符
+
+
+表格有带边框的,不带边框的,鼠标悬停有响应
+
+状态栏:有警告,danger,active
+
+按钮:default,primary,success,info
+
+
+导航条:navbar navbar-inverse 反色导航条
+
+
+轮播图:carousel
+
+
+放在右边 pull-right
+
+栅格能够嵌套
+<div class="col-md-10"><div class="col-md-6 hidden-sm hidden-xs"
+
+页面缩小,展示不同的栅格
+col-md-4 col-sm-6 col-xs-6
+
+页面缩小,即删除
+hidden-sm hidden-xs
+
+
+- bootstrap:  Bootstrap 是最受欢迎的 HTML、CSS 和 JS 框架，用于开发响应式布局、移动设备优先的 WEB 项目。
+  - 全局CSS样式: css样式
+    - 栅格系统:
+      - 将屏幕划分成12个格子,12列
+      - class='row' 当前是行
+      - 行里面放的是列 col-屏幕分辨率-数字    (每一种分辨率后的数字总和必须是等于12,如果超过12,另起一行)
+      - col-lg-数字: 在超宽屏幕上使用
+      - col-md-数字: 在中等屏幕上,PC电脑
+      - col-sm-数字:  在平板电脑上
+      - col-xs-数字:  在手机上
+  - 组件:  导航条 , 进度条, 字体
+  - javascript插件 : 轮播图
+  - 复制粘贴
+- 什么是响应式: 会根据不同的分辨率去显示不同页面结构,提高用户体验
+
+
+- HTML: 超文本标记语言: 设计网页,决定了网页的结构
+
+- CSS:  层叠样式表 ,主要是用来美化页面, 将美化和HTML代码进行分离,提高代码复用性
+
+- javascript: 脚本语言,由浏览器解释执行, 弱类型语言(var i), 提供用户交互
+
+- jquery:  javascript函数库,进一步的封装
