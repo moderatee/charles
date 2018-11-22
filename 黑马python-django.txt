@@ -415,3 +415,75 @@ BookInfo.objects.craete_book()
 需要在**模型类**中定义一个元类Meta,在里面定义一个类属性db_table就可以指定表名。
 class Meta:
     da_table="bookinfo"
+
+配置settings设置
+DEBUG = False
+ALLOWED_HOSTS = ['*']
+
+
+404：找不到页面，关闭调试模式之后，默认会显示一个标准的错误页面，如果要显示自定义的页面，则需要的templates目录下面自定义一个404.html文件。
+{{ request_path }}
+500页面
+
+
+谷歌请求:http://127.0.0.1:8000/showargs79
+urls配置:re_path('showargs(\d+)$',views.showargs)  位置参数
+        re_path('showargs(?P<num>\d+)$',views.showargs)  关键字参数
+views配置:def showargs(request,num): 
+    return HttpResponse(num)
+
+数据展示79
+
+
+HttpRequest.POST
+HttpRequest.GET
+是QueryDicT对象
+可以通过['key1']或者get('key1'),key不存在时,不会抛异常
+get('key1','default') 可以设置默认值.
+
+QueryDicT可以一个键存放多个值
+获取多个值的可以用getlist('a')
+
+
+
+在使用Django提交Post表单时遇到如下错误：
+
+Forbidden (403)
+CSRF verification failed. Request aborted
+
+在form表单中添加
+{% csrf_token %} 
+from django.views.decorators.csrf import csrf_exempt
+@csrf_exempt
+
+
+$ajax({
+    'url':请求地址,
+    'type':请求方式,
+    'datatype':逾期返回的数据格式,
+    'data':参数
+}).susscess(function(data){
+    //回调函数
+})
+
+
+
+$(function () {
+            $("#ajaxBtn").click(function () {
+
+                $.ajax({
+                    'url':'/ajax_handle',
+                    'dataType':'json',
+                    async:false,
+                    success:(function (data) {
+                        console.log("sucess")
+                    if(data.res==1){
+                        $('#message').show().html("提示信息")
+                    }
+                })
+                })
+            console.log("click end")
+            })
+        })
+
+async:false,同步请求

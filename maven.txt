@@ -121,5 +121,30 @@ dependency hierarchy---resolved depencies---右键exclueded maven artifacts
   	</dependency>
   </dependencies>
   </dependencyManagement>
+	
+	
+	版本常量:
+<properties>
+  		<spring.version>4.1.7.RELEASE</spring.version>
+  		<struts.version>2.3.24</struts.version>
+  		<hibernate.version></hibernate.version>
+  </properties>
+	
+	
+	 * PO(Persistence Object)持久化类
+ * 7个规范
+ * 1. 公有类
+ * 2. 公有无参构造
+ * 3. 私有属性
+ * 4. 公有的getter与setter
+ * 5. 实现java.io.Serializable接口
+ * 6. 不能用final修饰
+ * 7. 如果是基础类型，要使用它的包装类
+ * @author Administrator
+ 
+ 
+ 
+ maven已经有了基本的了解,就不想再深入学习下去,因为会耽误自己其他方面的学习.目前我还欠缺struts和hibernate的学习,尤其是hibernate.
+ 还有spring,springmvc,aop,jsp,jdbc,xml,http,oracle的深入
 
   

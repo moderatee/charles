@@ -148,4 +148,6 @@ data.value是纵坐标的值
 
 
 
+visibility="visible|hidden"，visible 显示，hidden 隐藏。  占空间
+style="DISPLAY: none;"  不占空间
                           
