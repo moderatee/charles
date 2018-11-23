@@ -358,3 +358,99 @@ $在配置文件中使用ognl
 ----------------------------------------------
 filter:过滤器，过滤从客户端对服务端的请求（包含jsp，html）
 拦截器：拦截客户端对Action的访问，拦截action的具体的方法
+
+
+客户端向服务器发送一个Action的请求，执行核心过滤器（doFilter）方法。在这个方法中，调用executeAction()方法，在这个方法内部调用dispatcher.serviceAction();在这个方法内部创建一个Action代理，最终执行的是Action代理中的execute(),在代理中执行的execute方法中调用ActionInvocation的invoke方法。在这个方法内部递归执行一组拦截器（完成部分功能），如果没有下一个拦截器，就会执行目标Action，根据Action的返回的结果进行页面跳转。
+
+
+拦截器需要继承 extends AbstractInterceptor
+
+实现interceptor的方法
+String obj = invocation.invoke();
+
+拦截器的配置:
+
+定义拦截器
+<interceptors>
+			<interceptor name="interceptorDemo1" class="com.itheima.web.interceptor.InterceptorDemo1"/>
+			<interceptor name="interceptorDemo2" class="com.itheima.web.interceptor.InterceptorDemo2"/>
+</interceptors> 
+
+在具体的action中进行引入(一旦引入自定义拦截器，默认拦截器栈的拦截器就不执行了。)
+<interceptor-ref name="interceptorDemo1"/>
+<interceptor-ref name="interceptorDemo2"/>
+<interceptor-ref name="defaultStack"/>
+
+
+定义拦截器栈
+<!-- 定义拦截器栈 -->
+			<interceptor-stack name="myStack">
+				<interceptor-ref name="defaultStack"/>
+				<interceptor-ref name="interceptorDemo1"/>
+				<interceptor-ref name="interceptorDemo2"/>
+			</interceptor-stack>
+
+<interceptor-ref name="myStack"/>
+
+
+
+struts的标签库学习
+
+<%@ taglib uri="/struts-tags" prefix="s"%>
+
+<s:set var="i" value="5" scope="request"/>
+<s:if test="#request.i>3">
+	i 大于 3
+</s:if>
+<s:elseif test="#request.i<3"> 获取request的值用#
+	i 小于 3
+</s:elseif>
+<s:else>
+	i 等于 3
+</s:else>
+
+
+遍历list
+<s:iterator var="i" value="{'aa','bb','cc'}">
+	<s:property value="#i"/>
+</s:iterator>
+
+
+遍历map
+<s:iterator var="entry" value="#{'aaa':'111','bbb':'222','ccc':'333'}">
+	<s:property value="#entry.key"/>--<s:property value="#entry.value"/>
+</s:iterator>
+
+
+for循环遍历
+<s:iterator var="i" begin="1" end="10" step="1">
+	<s:property value="#i"/>
+</s:iterator>
+
+status的使用,存放在context
+<s:iterator var="i" begin="100" end="300" step="5" status="status">
+	<s:if test="#status.count % 3 == 0">
+		<font color="red"><s:property value="#i"/></font>
+	</s:if>
+	<s:else>
+		<s:property value="#i"/>
+	</s:else>
+</s:iterator>
+
+
+ui标签
+<s:form action="uiAction" namespace="/" method="post" >
+	<s:hidden name="id" />
+	<s:textfield name="name" label="用户名"/>
+	<s:password name="password" label="密码" showPassword="true"/>
+	<s:textfield name="age" label="年龄"/>
+	<s:radio list="{'男','女'}" name="sex" label="性别"/>
+	<s:select list="{'北京','上海','深圳','韩国'}" name="city" label="籍贯" headerKey="" headerValue="-请选择-"/>
+	<s:checkboxlist list="#{'basketball':'篮球','football':'足球','volleyball':'排球','pingpang':'乒乓球'}" name="hobby" label="爱好"/>
+	<s:textarea name="info" cols="8" rows="2" label="介绍" ></s:textarea>
+	<s:submit value="提交"/>
+</s:form>
+</body>
+
+
+UI标签库（方便数据回显）  值栈会存储数据

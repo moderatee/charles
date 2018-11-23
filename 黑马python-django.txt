@@ -487,3 +487,57 @@ $(function () {
         })
 
 async:false,同步请求
+
+ajax的请求进行重定向,页面没有效果
+
+
+cookie是由服务器生成，存储在浏览器端的一小段文本信息。
+cookie的特点：
+1)  以键值对方式进行存储。
+2)  通过浏览器访问一个网站时，会将浏览器存储的跟***网站相关***的所有cookie信息发送给该网站的服务器。request.COOKIES
+3)  cookie是基于域名安全的。www.baidu.com www.tudou.com
+4)  cookie是有过期时间的，****如果不指定，默认关闭浏览器之后cookie就会过期****。
+
+session存储在服务器端。
+session的特点：
+1) session是以键值对进行存储的。
+2) session依赖于cookie。唯一的标识码保存在sessionid cookie中。
+3) session也是有过期时间，如果不指定，默认两周就会过期。
+
+sessionid是base64加密的
+
+
+request.session.clear()
+在存储中删除值的部分
+
+request.session.flush()
+删除键值对
+
+del request.session['name']
+删除某个键值对
+
+
+设置会话的超时时间，如果没有指定过期时间则两个星期后过期。
+
+request.session.set_expiry(value)
+如果value是一个整数，会话将在value秒没有活动后过期。
+如果value为0，那么用户会话的Cookie将在用户的浏览器关闭时过期。
+如果value为None，那么会话永不过期。
+
+
+session记住登录状态
+
+
+cookie:记住用户名。安全性要求不高。
+session:涉及到安全性要求比较高的数据。银行卡账户,密码
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+模板文件的使用
+
+通常是在视图函数中使用模板产生html内容返回给客户端。
+a)  加载模板文件 loader.get_template
+获取模板文件的内容，产生一个模板对象。
+b)  定义模板上下文 RequeseContext
+给模板文件传递数据。
+c)  模板渲染产生html页面内容 render
+用传递的数据替换相应的变量，产生一个替换后的标准的html内容。
