@@ -1,3 +1,6 @@
 web层--业务层--持久层
 
 Hibernate就是一个持久层的框架
+
+
+ORM：Object Relational Mapping（对象关系映射）。指的是将一个Java中的对象与关系型数据库中的表建立一种映射关系，从而操作对象就可以操作数据库中的表。
