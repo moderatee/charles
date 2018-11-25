@@ -1,6 +1,262 @@
+hibernate.show_sql - 是否显示所生成 SQL 语句，我们最常和它打交道
+hibernate.format_sql - 是否格式化生成的 SQL 语句，增加可读性，不然全挤在一行
+
+================================================================
 web层--业务层--持久层
 
 Hibernate就是一个持久层的框架
 
 
 ORM：Object Relational Mapping（对象关系映射）。指的是将一个Java中的对象与关系型数据库中的表建立一种映射关系，从而操作对象就可以操作数据库中的表。
+
+hibernate需要引进的包
+	数据库驱动包
+	Hibernate开发的必须的jar包
+	Hibernate引入日志记录包
+
+
+
+创建java类Customer，创建类名.hbm.xml
+<hibernate-mapping>
+	<!-- 建立类与表的映射 -->
+	<class name="com.itheima.hibernate.demo1.Customer" table="cst_customer">
+		<!-- 建立类中的属性与表中的主键对应 -->
+		<id name="cust_id" column="cust_id" >
+			<generator class="native"/>
+		</id>
+		
+		<!-- 建立类中的普通的属性和表的字段的对应 -->
+		<property name="cust_name" column="cust_name" length="32" />
+		<property name="cust_source" column="cust_source" length="32"/>
+		<property name="cust_industry" column="cust_industry"/>
+		<property name="cust_level" column="cust_level"/>
+		<property name="cust_phone" column="cust_phone"/>
+		<property name="cust_mobile" column="cust_mobile"/>
+	</class>
+</hibernate-mapping>
+
+创建hibernate.cfg.xml
+<hibernate-configuration>
+	<session-factory>
+		<!-- 连接数据库的基本参数 -->
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.connection.url">jdbc:mysql:///hibernate</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">root</property>
+		<!-- 配置Hibernate的方言 -->
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+		
+		<!-- 可选配置================ -->
+		<!-- 打印SQL -->
+		<property name="hibernate.show_sql">true</property>
+		<!-- 格式化SQL -->
+		<property name="hibernate.format_sql">true</property>
+		<!-- 自动创建表 -->
+		<property name="hibernate.hbm2ddl.auto">update</property>
+		
+		<!-- 配置C3P0连接池 -->
+		<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+		<!--在连接池中可用的数据库连接的最少数目 -->
+		<property name="c3p0.min_size">5</property>
+		<!--在连接池中所有数据库连接的最大数目  -->
+		<property name="c3p0.max_size">20</property>
+		<!--设定数据库连接的过期时间,以秒为单位,
+		如果连接池中的某个数据库连接处于空闲状态的时间超过了timeout时间,就会从连接池中清除 -->
+		<property name="c3p0.timeout">120</property>
+		 <!--每3000秒检查所有连接池中的空闲连接 以秒为单位-->
+		<property name="c3p0.idle_test_period">3000</property>
+		
+		<mapping resource="com/itheima/hibernate/demo1/Customer.hbm.xml"/>
+	</session-factory>
+</hibernate-configuration>
+
+
+// 1.加载Hibernate的核心配置文�?
+		Configuration configuration = new Configuration().configure();
+		// 手动加载映射
+		// configuration.addResource("com/itheima/hibernate/demo1/Customer.hbm.xml");
+		// 2.创建�?个SessionFactory对象：类似于JDBC中连接池
+		SessionFactory sessionFactory = configuration.buildSessionFactory();
+		// 3.通过SessionFactory获取到Session对象：类似于JDBC中Connection
+		Session session = sessionFactory.openSession();
+		// 4.手动�?启事务：
+		Transaction transaction = session.beginTransaction();
+		// 5.编写代码
+		
+		Customer customer = new Customer();
+		customer.setCust_name("王西");
+		
+		session.save(customer);
+		
+		// 6.事务提交
+		transaction.commit();
+		// 7.资源释放
+		session.close();
+		sessionFactory.close();
+
+
+增加xml配制的提示:
+windows--preference--xml catelog--user--uri
+
+
+1.5.2.1	映射的配置
+	【class标签的配置】
+	标签用来建立类与表的映射关系
+	属性：
+	name		：类的全路径
+	table		：表名（类名与表名一致，table可以省略）
+	catalog		：数据库名
+	【id标签的配置】
+	标签用来建立类中的属性与表中的主键的对应关系
+	属性：
+	name		：类中的属性名
+	column		：表中的字段名（类中的属性名和表中的字段名如果一致，column可以省略）
+	length		：长度
+	type			：类型
+	【property标签的配置】
+	标签用来建立类中的普通属性与表的字段的对应关系
+	属性：
+	name		：类中的属性名
+	column		：表中的字段名
+	length		：长度
+	type			：类型
+	not-null		：设置非空
+	unique		：设置唯一
+
+===================================================
+	1.5.3.2	核心的配置
+###	必须的配置
+	连接数据库的基本的参数
+	驱动类
+	url路径
+	用户名
+	密码
+	方言
+###	可选的配置
+	显示SQL		：hibernate.show_sql
+	格式化SQL	：hibernate.format_sql
+	自动建表	：hibernate.hbm2ddl.auto
+	none		：不使用hibernate的自动建表
+	create		：如果数据库中已经有表，删除原有表，重新创建，如果没有表，新建表。（测试）
+	create-drop	：如果数据库中已经有表，删除原有表，执行操作，删除这个表。如果没有表，新建一个，使用完了删除该表。（测试）
+	update		：如果数据库中有表，使用原有表，如果没有表，创建新表（更新表结构）
+	validate		：如果没有表，不会创建表。只会使用数据库中原有的表。（校验映射和表结构）。
+###	映射文件的引入	
+	引入映射文件的位置
+
+
+
+
+Configuration
+	作用：
+	加载核心配置文件
+	hibernate.properties
+Configuration cfg = new Configuration();
+	hibernate.cfg.xml
+Configuration cfg = new Configuration().configure();
+	加载映射文件
+// 手动加载映射
+configuration.addResource("com/itheima/hibernate/demo1/Customer.hbm.xml")
+
+
+SessionFactory内部维护了Hibernate的连接池和Hibernate的二级缓存（不讲）。是线程安全的对象。一个项目创建一个对象即可。
+	配置连接池：（了解）
+<!-- 配置C3P0连接池 -->
+		<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+		<!--在连接池中可用的数据库连接的最少数目 -->
+		<property name="c3p0.min_size">5</property>
+		<!--在连接池中所有数据库连接的最大数目  -->
+		<property name="c3p0.max_size">20</property>
+		<!--设定数据库连接的过期时间,以秒为单位,
+		如果连接池中的某个数据库连接处于空闲状态的时间超过了timeout时间,就会从连接池中清除 -->
+		<property name="c3p0.timeout">120</property>
+		 <!--每3000秒检查所有连接池中的空闲连接 以秒为单位-->
+		<property name="c3p0.idle_test_period">3000</property>
+
+
+/**
+ * Hibernate的工具类
+ * @author jt
+ *
+ */
+public class HibernateUtils {
+
+	public static final Configuration cfg;
+	public static final SessionFactory sf;
+	
+	static{
+		cfg = new Configuration().configure();
+		sf = cfg.buildSessionFactory();
+	}
+	
+	public static Session openSession(){
+		return sf.openSession();
+	}
+}
+
+
+
+Session代表的是Hibernate与数据库的链接对象。不是线程安全的。与数据库交互桥梁。不能定义成全局变量
+/**
+		 * get方法
+		 * 	* 采用的是立即加载，执行到这行代码的时候，就会马上发送SQL语句去查询。
+		 *  * 查询后返回是真实对象本身。
+		 * 	* 查询一个找不到的对象的时候，返回null
+		 * 
+		 * load方法
+		 * 	* 采用的是延迟加载（lazy懒加载），执行到这行代码的时候，不会发送SQL语句，当真正使用这个对象的时候才会发送SQL语句。
+		 *  * 查询后返回的是代理对象。javassist-3.18.1-GA.jar 利用javassist技术产生的代理。
+		 *  * 查询一个找不到的对象的时候，返回ObjectNotFoundException
+		 */
+		
+		Customer customer = session.load(Customer.class, 200l);
+		System.out.println(customer);
+
+// 先查询，再修改(推荐)
+		Customer customer = session.get(Customer.class, 1l);
+		customer.setCust_name("王小贱");
+		session.update(customer);
+		直接修改,会改变原来的未修改的对象
+
+
+	Serializable save(Object obj);
+	void delete(Object obj);
+
+		// 直接创建对象，删除
+	/*	Customer customer = new Customer();
+		customer.setCust_id(1l);
+		session.delete(customer);*/
+		
+		// 先查询再删除(推荐)--级联删除
+		Customer customer = session.get(Customer.class, 2l);
+		session.delete(customer);
+
+	void saveOrUpdate(Object obj)
+
+查询所有
+ 接收HQL：Hibernate Query Language 面向对象的查询语言
+		Query query = session.createQuery("from Customer");
+		List<Customer> list = query.list();
+		for (Customer customer : list) {
+			System.out.println(customer);
+		}
+		
+		// 接收SQL：
+		SQLQuery query = session.createSQLQuery("select * from cst_customer");
+		List<Object[]> list = query.list();
+		for (Object[] objects : list) {
+			System.out.println(Arrays.toString(objects));
+		}
+
+
+持久化:将内存中的对象持久化到数据库中的过程,Hibernate就是用来做持久化的框架
+持久化类:一个java对象与数据库的表建立了映射关系,name这个类在Hibernate中就被称为持久化类
+
+
+
+持久化类的编写
+提供一个无参的构造方法--反射
+对属性需要私有,对属性提供get,set方法
+属性使用包装类
+提供一个唯一标识与数据库主键对应,用去区分对象
+不使用final修饰--延迟加载

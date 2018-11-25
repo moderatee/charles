@@ -1,2 +1,0 @@
-hibernate.show_sql - 是否显示所生成 SQL 语句，我们最常和它打交道
-hibernate.format_sql - 是否格式化生成的 SQL 语句，增加可读性，不然全挤在一行
