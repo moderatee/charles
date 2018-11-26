@@ -260,3 +260,136 @@ Session代表的是Hibernate与数据库的链接对象。不是线程安全的�
 属性使用包装类
 提供一个唯一标识与数据库主键对应,用去区分对象
 不使用final修饰--延迟加载
+
+
+
+代理主键:逐渐本身不是表中必须的一个字段(不是实体中的某个具体的属性)
+
+对扩展是open的,对修改是close的.
+
+主键生成策略
+increasement---自动增长机制,不适用于集群,多进程
+原理:先select max(id) from table,然后id+1
+
+identity---使用的是数据库底层的增长,不适用于oracle,oracle没有自动增长,通过序列进行
+
+sequence---采用序列的方式,oracle,不适用于mysql
+
+uuid---适用于字符串类型主键
+
+native:可以在identity和sequence切换
+
+assigned:hibernate放弃外键的管理,用户可以自己设置
+
+foreign:一对一的关联映射下使用
+
+
+
+持久化的三种状态
+瞬时态,持久态,托管态
+
+瞬时态:没有唯一标识,没有被session管理 Customer customer  = new Customer();
+持久态:有唯一标识,被session管理 Serializable id = session.save(customer);持久化的对象可以自动更新数据库
+托管态:有唯一标识,没有被session管理  session.close();session关闭后的对象的状态
+
+瞬时获得
+Customer customer  = new Customer();
+瞬时到持久
+save,saveorupdate
+瞬时到托管
+setid
+
+
+持久获得
+get,load,find
+持久到瞬时
+delete
+持久到托管
+close,clear
+
+托管获得
+--
+托管到持久
+update,saveorupdate
+脱管到瞬时
+customer.setid(null)
+
+
+持久态对象自动更新数据库
+Customer customer = session.get(Customer.class, 100l);
+		customer.setCust_name("王西");		
+		session.save(customer);
+
+hibernate优化:缓存和抓取策略
+hibernate一级缓存:session级别的缓存,生命周期与session一致.不可卸载.hibernate的二级缓存是sessionFactory级别的缓存,需要配置的缓存
+
+
+Customer customer = session.get(Customer.class, 100l);
+Customer customer = session.get(Customer.class, 100l);
+get使用两次,查询语句仅用了一次,对象是同一个
+
+save,get后都会在一级缓存中产生对象
+
+一级缓存会有快照区
+
+事务:逻辑上的一组操作.要么全部成功,要么全部失败.
+
+事务特性:
+原子性:事务不可分割
+一致性:事务执行的前后,数据的完整性保持一致
+隔离性:一个事物执行的过程中,不受其他事务的干扰
+持久性:事务执行完成后,数据持久到数据库中
+
+
+脏读,幻读,不可重复读
+
+脏读:一个事务读到另一个事务未提交的数据
+不可重复读:一个事务读到另一个事务已经提交的update数据,导致在前一个事务多次查询结果不一致
+虚读:一个事务读到另一个事务已经提交的insert数据,导致在前一个事务多次查询结果不一致
+
+
+解决问题:设置事物的隔离级别
+读未提交:
+读已提交:解决脏读   oracle
+可重复读:解决脏读和不可重复读  mysql
+串行化:解决所有
+
+
+hibernate增加属性hibernate.connection.isolation(1,2,4,8)
+
+
+hibernate保证service连接对象是同一个
+向下传递DBUtils
+使用ThreadLocal对象:将这个连接对象绑定到当前线程,在dao方法中,通过当前的线程获得连接对象.
+
+hibernate内部已经绑定了ThreLocal.在SessionFactory中提供了getCurrSession(),可通过配置完成
+<!-- 配置 Session 绑定本地线程 -->
+
+<property name="hibernate.current_session_context_class">thread</property>
+
+session可以不需要close,因为会自动销毁
+
+Query接口用于接收HQL.hibernate query language
+
+
+关于hibernate插入数据到mysql数据库中文乱码问题的解决
+<property name="connection.url">jdbc:mysql://localhost:3306/hibertest?characterEncoding=utf-8</property>
+
+
+使用query对象
+		String hql="from Customer where cust_name like ?";
+		Query createQuery = session.createQuery(hql);
+		createQuery.setParameter(0, "王%");
+		createQuery.setFirstResult(1);
+		createQuery.setMaxResults(2);
+		List<Customer> list=createQuery.list();
+		for (Customer customer : list) {
+			System.out.println(customer);
+		}
+使用Criteria对象
+		Criteria criteria=session.createCriteria(Customer.class);
+		criteria.add(Restrictions.like("cust_name", "刘%"));
+		criteria.setFirstResult(1);
+		criteria.setMaxResults(2);
+		List<Customer> list=criteria.list();
+使用sqlquery	
